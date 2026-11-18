@@ -2,7 +2,7 @@ plugins {
     id("java")
     application
     `java-library`
-     id("org.openjfx.javafxplugin") version "0.1.0"
+    jacoco
 }
 
 group = "org.example"
@@ -13,24 +13,35 @@ repositories {
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.13.4")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation("commons-io:commons-io:2.17.0")
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation("org.apache.commons:commons-lang3:3.17.0")
+    // https://mvnrepository.com/artifact/com.univocity/univocity-parsers
+    implementation("com.univocity:univocity-parsers:2.9.1")
+
+
 }
 
 tasks.test {
     useJUnitPlatform()
-}
-
-application {
-    mainClass = "org.example.Main"
-}
-
-tasks.withType<Jar> {
-    manifest {
-        attributes["Main-Class"] = "org.example.Main"
+    testLogging {
+        events("passed", "skipped", "failed")
     }
 }
-javafx {
-    version = "22.0.1"
-    modules("javafx.controls", "javafx.fxml")
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // tests are required to run before generating the report
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.14"
+    reportsDirectory = layout.buildDirectory.dir("customJacocoReportDir")
 }
