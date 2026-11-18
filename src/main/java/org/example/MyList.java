@@ -94,8 +94,17 @@ class MyList<E> implements List {
   }
   
   //Stuff put in just to make the example compile, should be implemented properly
-  public int lastIndexOf(Object e) {return -1;}
-  public int indexOf(Object e) {return -1;}
+  public int lastIndexOf(Object e) {
+    for(int i = listSize-1; i >= 0; i--)
+      if(storage[i].equals(e)) return i;
+    return -1;
+  }
+  public int indexOf(Object e) {
+    for(int i = 0; i < listSize; i++)
+      if(storage[i].equals(e)) return i;
+    return -1;
+  }
+
   public void add(int N, Object e) {;}
   public E set(int N, Object e) {set((E) e,N);return (E) storage[N];}
   public boolean retainAll(Collection op) {return false;}
@@ -103,11 +112,24 @@ class MyList<E> implements List {
   public boolean addAll(int N,Collection op) {return false;}
   public boolean addAll(Collection op) {return false;}
   public boolean containsAll(Collection op) {return false;}
-  public boolean remove(Object e) {return false;}
+  public boolean remove(Object e) {
+    for(int i = 0; i< listSize; i++)
+      if(storage[i].equals(e)) {
+        remove(i);
+        return true;
+      }
+    return false;
+  }
   public Object[] toArray() { return storage;}
   public Object[] toArray(Object e[]) { return storage;}
   public myListIterator<E> iterator() {return new myListIterator<E>(this);}
-  public boolean contains(Object o) {return false;}
+
+  public boolean contains(Object o) {
+    for(int i = 0; i < listSize; i++)
+      if(storage[i].equals(o)) return true;
+    return false;
+  }
+
   public boolean isEmpty() {
     if(listSize >0) return false;
     else return true;
