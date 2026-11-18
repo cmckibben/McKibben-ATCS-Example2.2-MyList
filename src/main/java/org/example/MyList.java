@@ -105,7 +105,18 @@ class MyList<E> implements List {
     return -1;
   }
 
-  public void add(int N, Object e) {;}
+  public void add(int N, Object e) {
+      if (storage.length<=listSize) {
+      Object[] s=new Object[storage.length*2];
+      for (int m=0; m<listSize; ++m)
+        s[m]=storage[m];
+      storage=s;
+    }
+    for(int i = listSize; i > N; i--)
+      storage[i] = storage[i-1];
+    storage[N] = e;
+    ++listSize;
+  }
   public E set(int N, Object e) {set((E) e,N);return (E) storage[N];}
   public boolean retainAll(Collection op) {return false;}
   public boolean removeAll(Collection op) {return false;}
@@ -120,8 +131,11 @@ class MyList<E> implements List {
       }
     return false;
   }
-  public Object[] toArray() { return storage;}
-  public Object[] toArray(Object e[]) { return storage;}
+  public Object[] toArray() { return Arrays.copyOf(storage,listSize);}
+  public Object[] toArray(Object e[]) { 
+    e = Arrays.copyOf(storage,listSize);
+    return e;
+  }
   public myListIterator<E> iterator() {return new myListIterator<E>(this);}
 
   public boolean contains(Object o) {

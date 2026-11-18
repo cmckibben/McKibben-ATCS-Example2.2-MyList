@@ -24,19 +24,17 @@ public class myListIterator<E> implements ListIterator<E> {
         return position > start;
     }
     public E next() {
-      position++;
       if(position>=list.size())
         throw new ArrayIndexOutOfBoundsException();
-      else
-        return (E) list.get(position);
+      position++;
+      return (E) list.get(position-1);
     }    
 
     public E previous() {
-      position--;
       if(position<start)
         throw new ArrayIndexOutOfBoundsException();
-      else
-        return (E) list.get(position);
+      position--;
+      return (E) list.get(position);
     }    
 
 
@@ -52,6 +50,6 @@ public class myListIterator<E> implements ListIterator<E> {
       throw new UnsupportedOperationException();
     }
 
-    public int nextIndex() { return position+1;}
+    public int nextIndex() { return position;}
     public int previousIndex() { return position -1;}
 }
